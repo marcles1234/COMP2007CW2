@@ -14,6 +14,8 @@ public class ObjectMove : MonoBehaviour
     public PlayerSphere playerSphere;
     float stasisTime = 10f;
     bool inStasis = false;
+    public Animator anim;
+    int damping = 2;
 
     void Start()
     {
@@ -24,12 +26,21 @@ public class ObjectMove : MonoBehaviour
 
     void Update()
     {
-
-        if (!canMove) return;
+        anim.SetBool("Run", canMove);
+        anim.speed = speed;
+        if (!canMove)
+        {
+            speed = 1f;
+            return;
+        }
 
         transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
         Vector2 posXZ = new Vector2(transform.position.x, transform.position.z);
         Vector2 targetXZ = new Vector2(currentPoint.x, currentPoint.z);
+        var lookPos = currentPoint - transform.position;
+        lookPos.y = 0;
+        var roatation = Quaternion.LookRotation(lookPos) *Quaternion.Euler(0, 90, 0);
+        transform.rotation = Quaternion.Slerp(transform.rotation, roatation, Time.deltaTime * damping);
         if (Vector2.Distance(posXZ, targetXZ) < 0.05f)
         {
             NextPoint();
