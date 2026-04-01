@@ -10,7 +10,6 @@ public class StasisScript : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
     public LayerMask detectableLayer;
-    public MeshRenderer mesh;
     public Text crosshair;
     public Text shootText;
     public LineRenderer line;
