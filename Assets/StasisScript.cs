@@ -6,18 +6,19 @@ using UnityEngine.UI;
 public class StasisScript : MonoBehaviour
 {
     public Transform InteractorSource;
+    public Transform PitchforkTip;
     private Ray ray;
     private RaycastHit hit;
     public LayerMask detectableLayer;
-    public GameObject hitMarker;
     public MeshRenderer mesh;
     public Text crosshair;
     public Text shootText;
+    public LineRenderer line;
 
     void Start()
     {
-        mesh.enabled = true;
         crosshair.enabled = true;
+        line.enabled = false;
     }
 
     void Update()
@@ -27,7 +28,7 @@ public class StasisScript : MonoBehaviour
         {
             SingleRaycast(r);
         }
-        Debug.DrawRay(InteractorSource.position, InteractorSource.forward * 100, Color.red, 1f);
+        line.SetPosition(0, PitchforkTip.position);
     }
 
     void SingleRaycast(Ray ray)
@@ -35,13 +36,20 @@ public class StasisScript : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100f, detectableLayer))
         {
             shootText.enabled = false;
-            //Debug.Log("Ray hit: " + hit.collider.name);
             GameObject targetObject = hit.collider.gameObject;
             ObjectMove script = targetObject.GetComponent<ObjectMove>();
             script.StartCoroutine(script.stasis());
             Vector3 impactPoint = hit.point;
-            Quaternion facingRotation = Quaternion.FromToRotation(Vector3.forward, -hit.normal);
-            Destroy(Instantiate(hitMarker, impactPoint, facingRotation), 2f);
+
+            line.enabled = true;
+            line.SetPosition(1, impactPoint);
+            StartCoroutine(HideLine());
         }
+    }
+
+    IEnumerator HideLine()
+    {
+        yield return new WaitForSeconds(0.2f);
+        line.enabled = false;
     }
 }

@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
-[RequireComponent(typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
 {
     public float walkSpeed = 1;
     public float runSpeed = 2;
+    float currentSpeed;
     public float turnSpeed = 1;
     public float gravity = -9.81f;
     public float verticalVelocity;
@@ -16,11 +17,12 @@ public class FirstPersonController : MonoBehaviour
     private float pitch = 0;
     public StaminaBar staminaRegen;
     public Slider slider;
+    public Animator playerAnim;
+    public CinemachineVirtualCamera playerCam;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-
         character = GetComponent<CharacterController>();
     }
 
@@ -35,16 +37,22 @@ public class FirstPersonController : MonoBehaviour
         if (Input.GetButton("Sprint") && slider.value > 0)
         {
             character.Move(moveDirection * runSpeed * Time.deltaTime);
+            currentSpeed = runSpeed;
             staminaRegen.increase = 1;
         } else if (Input.GetButtonUp("Sprint"))
         {
             character.Move(moveDirection * walkSpeed * Time.deltaTime);
+            currentSpeed = walkSpeed;
             StartCoroutine(WaitToRegen());
+        } else if (x == 0 && y == 0)
+        {
+            currentSpeed = 0;
         } else
         {
             character.Move(moveDirection * walkSpeed * Time.deltaTime);
+            currentSpeed = walkSpeed;
         }
-       
+        playerAnim.SetFloat("Speed", currentSpeed);
 
         float mX = Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime;
         float mY = Input.GetAxis("Mouse Y") * turnSpeed * Time.deltaTime;
@@ -71,6 +79,15 @@ public class FirstPersonController : MonoBehaviour
         Vector3 verticalMove = new Vector3(0, verticalVelocity, 0);
         character.Move(verticalMove * Time.deltaTime);
     }
+    
+
+    public void playVictoryAnim()
+    {
+        playerAnim.SetBool("Victory", true);
+        playerCam.Priority = 9;
+        this.enabled = false;
+    }
+
 
     IEnumerator WaitToRegen()
     {

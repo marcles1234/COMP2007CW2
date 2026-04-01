@@ -7,7 +7,9 @@ public class ObjectMove : MonoBehaviour
     public Transform checkPoints;
     private int currentPointIndex = 0;
     private Vector3 currentPoint = Vector3.zero;
-    public float speed = 2;
+    float walkSpeed = 10f;
+    float runSpeed = 20f;
+    float speed;
     private Vector3 target;
     public bool canMove = true;
     public bool pointIncrementPositive = true;
@@ -19,6 +21,8 @@ public class ObjectMove : MonoBehaviour
 
     void Start()
     {
+        speed = walkSpeed;
+        anim = GetComponentInChildren<UnityEngine.Animator>();
         transform.position = checkPoints.GetChild(0).position;
         StartCoroutine(WaitToGetY());
         NextPoint();
@@ -30,7 +34,7 @@ public class ObjectMove : MonoBehaviour
         anim.speed = speed;
         if (!canMove)
         {
-            speed = 1f;
+            speed = walkSpeed;
             return;
         }
 
@@ -81,7 +85,7 @@ public class ObjectMove : MonoBehaviour
         {
             if (isInDanger)
             {
-                speed = 5f;
+                speed = runSpeed;
                 if (swapDirection)
                 {
                     if (pointIncrementPositive)
@@ -97,7 +101,7 @@ public class ObjectMove : MonoBehaviour
             }
             else
             {
-                speed = 2f;
+                speed = walkSpeed;
 
             }
         }
@@ -109,7 +113,7 @@ public class ObjectMove : MonoBehaviour
         speed = 0f;
         yield return new WaitForSeconds(stasisTime);
         inStasis = false;
-        speed = 2f;
+        speed = walkSpeed;
     }
 
     IEnumerator WaitToGetY()

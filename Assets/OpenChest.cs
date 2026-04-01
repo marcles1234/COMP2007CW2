@@ -7,7 +7,7 @@ public class OpenChest : MonoBehaviour, IInteractable
 {
     public Animator anim;
     public bool chestOpened = false;
-    public StasisScript script;
+    public GameObject pitchfork;
     public Text shootText;
 
 
@@ -24,7 +24,7 @@ public class OpenChest : MonoBehaviour, IInteractable
     IEnumerator activateWeapon()
     {
         yield return new WaitForSeconds(1.5f);
-        script.enabled = true;
+        pitchfork.SetActive(true);
         shootText.enabled = true;
     }
 }

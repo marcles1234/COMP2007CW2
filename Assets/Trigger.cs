@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 public class Trigger : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Trigger : MonoBehaviour
     public Text collectedText;
     private int objectives = 3;
     public Text victoryText;
+    public TextMeshPro dropoffText;
+    public FirstPersonController script;
 
     void Start()
     {
@@ -36,6 +39,8 @@ public class Trigger : MonoBehaviour
         if (objective == objectives)
         {
             victoryText.enabled = true;
+            dropoffText.enabled = false;
+            script.playVictoryAnim();
         }
     }
 }
