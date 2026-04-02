@@ -12,7 +12,7 @@ public class Trigger : MonoBehaviour
     public Interactor holder;
     private int objective = 0;
     public Text collectedText;
-    private int objectives = 3;
+    private int objectives = 4;
     public Text victoryText;
     public TextMeshPro dropoffText;
     public FirstPersonController script;

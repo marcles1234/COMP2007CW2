@@ -45,15 +45,8 @@ public class Interactor : MonoBehaviour
                     }
 
                     // Pickup if it has Rigidbody
-                    if (targetObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    if (targetObject.TryGetComponent<Pickupable>(out Pickupable pu))
                     {
-                        /* // Disable NavMeshAgent when picking up
-                        if (targetObject.TryGetComponent<UnityEngine.AI.NavMeshAgent>(out var agent))
-                        {
-                            agent.isStopped = true; // Pause movement but keep agent active
-                        } */
-                        rb.isKinematic = true;
-                        rb.useGravity = false;
                         targetObject.transform.SetParent(holdPoint);
                         targetObject.transform.localPosition = Vector3.zero;
                         targetObject.transform.localRotation = Quaternion.identity;
@@ -73,22 +66,18 @@ public class Interactor : MonoBehaviour
             }
             else
             {
-                // Drop the object
-                Rigidbody rb = heldObject.GetComponent<Rigidbody>();
-                rb.isKinematic = false;
-                rb.useGravity = true;
                 heldObject.transform.SetParent(null);
+
+                if (heldObject.TryGetComponent<Pickupable>(out Pickupable pickup))
+                {
+                    pickup.isHeld = false;
+                }
 
                 // Re-enable movement
                 if (heldObject.TryGetComponent<ObjectMove>(out ObjectMove mover))
                 {
                     mover.canMove = !inZone;  // Only allow movement if not in drop zone
                 }
-
-                /*if (heldObject.TryGetComponent<UnityEngine.AI.NavMeshAgent>(out var agent))
-                {
-                    agent.isStopped = inZone; // Same logic: enable agent only if not in drop zone
-                } */
 
                 // Notify trigger if in zone
                 if (inZone)
