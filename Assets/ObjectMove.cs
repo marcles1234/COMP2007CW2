@@ -8,14 +8,14 @@ public class ObjectMove : MonoBehaviour
     private int currentPointIndex = 0;
     private Vector3 currentPoint = Vector3.zero;
     float walkSpeed = 10f;
-    float runSpeed = 20f;
-    float speed;
+    public float runSpeed = 20f;
+    public float speed;
     private Vector3 target;
     public bool canMove = true;
     public bool pointIncrementPositive = true;
     public PlayerSphere playerSphere;
     float stasisTime = 10f;
-    bool inStasis = false;
+    public bool inStasis = false;
     public Animator anim;
     int damping = 2;
 
@@ -34,7 +34,7 @@ public class ObjectMove : MonoBehaviour
         anim.speed = speed;
         if (!canMove)
         {
-            speed = walkSpeed;
+            speed = 1f;
             return;
         }
 
@@ -102,7 +102,6 @@ public class ObjectMove : MonoBehaviour
             else
             {
                 speed = walkSpeed;
-
             }
         }
     }
@@ -114,6 +113,26 @@ public class ObjectMove : MonoBehaviour
         yield return new WaitForSeconds(stasisTime);
         inStasis = false;
         speed = walkSpeed;
+    }
+
+    public IEnumerator teleport()
+    {
+        SkinnedMeshRenderer[] skinned = GetComponentsInChildren<SkinnedMeshRenderer>();
+        for (int i = 6; i > 0; i--)
+        {
+            float blinkTime = i / 10f;
+            foreach (SkinnedMeshRenderer s in skinned)
+            {
+                s.enabled = false;
+            }
+            yield return new WaitForSeconds(blinkTime);
+            foreach (SkinnedMeshRenderer s in skinned)
+            {
+                s.enabled = true;
+            }
+            yield return new WaitForSeconds(blinkTime);
+        }
+        transform.position = target;
     }
 
     IEnumerator WaitToGetY()

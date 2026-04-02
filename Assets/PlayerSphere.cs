@@ -31,9 +31,7 @@ public class PlayerSphere : MonoBehaviour
                 nearestCheck = allCheckpoints[i];
                 nearsetDistance = distance;
             }
-            
         }
-        //Debug.Log("Nearest point: " + nearestCheck.name);
 
 
         //----Detect Chickens----

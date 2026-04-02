@@ -19,6 +19,7 @@ public class FirstPersonController : MonoBehaviour
     public Slider slider;
     public Animator playerAnim;
     public CinemachineVirtualCamera playerCam;
+    public GameObject pitchfork;
 
     void Start()
     {
@@ -83,6 +84,8 @@ public class FirstPersonController : MonoBehaviour
 
     public void playVictoryAnim()
     {
+        pitchfork.SetActive(false);
+        currentSpeed = 0;
         playerAnim.SetBool("Victory", true);
         playerCam.Priority = 9;
         this.enabled = false;

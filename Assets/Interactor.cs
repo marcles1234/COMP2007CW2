@@ -44,7 +44,7 @@ public class Interactor : MonoBehaviour
                         interactObj.Interact();
                     }
 
-                    // Pickup if it has Rigidbody
+                    // Pickup if possible
                     if (targetObject.TryGetComponent<Pickupable>(out Pickupable pu))
                     {
                         targetObject.transform.SetParent(holdPoint);
@@ -67,6 +67,8 @@ public class Interactor : MonoBehaviour
             else
             {
                 heldObject.transform.SetParent(null);
+                Vector3 dropPosition = transform.position + transform.forward * 10f;
+                heldObject.transform.position = new Vector3(dropPosition.x, 0.2f, dropPosition.z);
 
                 if (heldObject.TryGetComponent<Pickupable>(out Pickupable pickup))
                 {
@@ -83,6 +85,10 @@ public class Interactor : MonoBehaviour
                 if (inZone)
                 {
                     triggerZone.ObjectDeposit(1);
+                } else
+                {
+                    mover.speed = mover.runSpeed;
+                    mover.StartCoroutine(mover.teleport());
                 }
 
                 heldObject = null;
