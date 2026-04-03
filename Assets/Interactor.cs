@@ -17,21 +17,45 @@ public class Interactor : MonoBehaviour
     private bool inZone = false;
     public Trigger triggerZone;
     public Text interactText;
+    Outline currentOutline;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
+        Ray r = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+        //---Outliner---
+        bool hasValidTarget = false;
+        if (Physics.Raycast(r, out RaycastHit hit, InteractRange))
+        {
+            if (hit.collider.TryGetComponent(out Outline outline))
+            {
+                hasValidTarget = true;
+
+                if (currentOutline != outline)
+                {
+                    if (currentOutline != null)
+                        currentOutline.enabled = false;
+
+                    currentOutline = outline;
+                    currentOutline.enabled = true;
+                }
+            }
+        }
+
+        if (!hasValidTarget && currentOutline != null)
+        {
+            currentOutline.enabled = false;
+            currentOutline = null;
+        }
+
+
+        //---Interactor---
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldObject == null)
             {
-                Ray r = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
                 if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange))
                 {
                     GameObject targetObject = hitInfo.collider.gameObject;
@@ -55,6 +79,7 @@ public class Interactor : MonoBehaviour
                         if (targetObject.TryGetComponent<ObjectMove>(out ObjectMove mover))
                         {
                             mover.canMove = false;
+                            currentOutline.enabled = false;
                         }
                         if (inZone)
                         {
