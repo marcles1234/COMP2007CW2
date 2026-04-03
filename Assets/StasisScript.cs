@@ -13,6 +13,7 @@ public class StasisScript : MonoBehaviour
     public Text crosshair;
     public Text shootText;
     public LineRenderer line;
+    public AudioSource electric;
 
     void Start()
     {
@@ -34,6 +35,7 @@ public class StasisScript : MonoBehaviour
     {
         if (Physics.Raycast(ray, out hit, 100f, detectableLayer))
         {
+            electric.Play();
             shootText.enabled = false;
             GameObject targetObject = hit.collider.gameObject;
             ObjectMove script = targetObject.GetComponent<ObjectMove>();

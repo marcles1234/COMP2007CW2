@@ -18,6 +18,8 @@ public class ObjectMove : MonoBehaviour
     public bool inStasis = false;
     public Animator anim;
     int damping = 2;
+    public AudioSource ambient, ruffle, scream;
+    public bool inZone;
 
     void Start()
     {
@@ -35,8 +37,38 @@ public class ObjectMove : MonoBehaviour
         if (!canMove)
         {
             speed = 1f;
+            if (!inZone)
+            {
+                if (!ruffle.isPlaying)
+                {
+                    ruffle.Play();
+                    ambient.Stop();
+                }
+                
+            } else
+            {
+                if (!ambient.isPlaying) 
+                {
+                    ambient.Play();
+                    ruffle.Stop();
+                }    
+            }
             return;
         }
+
+        if (speed == walkSpeed)
+        {
+            ambient.pitch = 1f;
+            if (!ambient.isPlaying) { ambient.Play(); }
+        } else if (speed == runSpeed)
+        {
+            ambient.pitch = 1.5f;
+            if (!ambient.isPlaying) { ambient.Play(); }
+        } else 
+        {
+            if (ambient.isPlaying) { ambient.Stop(); }
+        }
+        
 
         transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
         Vector2 posXZ = new Vector2(transform.position.x, transform.position.z);
@@ -85,6 +117,7 @@ public class ObjectMove : MonoBehaviour
         {
             if (isInDanger)
             {
+                scream.Play();
                 speed = runSpeed;
                 if (swapDirection)
                 {
@@ -104,6 +137,11 @@ public class ObjectMove : MonoBehaviour
                 speed = walkSpeed;
             }
         }
+    }
+
+    public void inObjective (bool objective)
+    {
+        inZone = objective;
     }
 
     public IEnumerator stasis()

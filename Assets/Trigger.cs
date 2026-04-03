@@ -16,6 +16,7 @@ public class Trigger : MonoBehaviour
     public Text victoryText;
     public TextMeshPro dropoffText;
     public FirstPersonController script;
+    public AudioSource victorySound;
 
     void Start()
     {
@@ -40,6 +41,7 @@ public class Trigger : MonoBehaviour
         {
             victoryText.enabled = true;
             dropoffText.enabled = false;
+            victorySound.Play();
             script.playVictoryAnim();
         }
     }

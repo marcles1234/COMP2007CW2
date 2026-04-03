@@ -20,6 +20,7 @@ public class FirstPersonController : MonoBehaviour
     public Animator playerAnim;
     public CinemachineVirtualCamera playerCam;
     public GameObject pitchfork;
+    public AudioSource walkSound;
 
     void Start()
     {
@@ -55,6 +56,28 @@ public class FirstPersonController : MonoBehaviour
         }
         playerAnim.SetFloat("Speed", currentSpeed);
 
+        if (currentSpeed != 0)
+        {
+            if (currentSpeed == runSpeed)
+            {
+                walkSound.pitch = 1.5f;
+            } else
+            {
+                walkSound.pitch = 1f;
+            }
+
+            if (!walkSound.isPlaying)
+            {
+                walkSound.Play();
+            }
+        } else
+        {
+            if (walkSound.isPlaying)
+            {
+                walkSound.Stop();
+            }
+        }
+
         float mX = Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime;
         float mY = Input.GetAxis("Mouse Y") * turnSpeed * Time.deltaTime;
 
@@ -86,7 +109,7 @@ public class FirstPersonController : MonoBehaviour
     {
         pitchfork.SetActive(false);
         currentSpeed = 0;
-        playerAnim.SetBool("Victory", true);
+        playerAnim.Play("Victory", 0, 0f);
         playerCam.Priority = 9;
         this.enabled = false;
     }

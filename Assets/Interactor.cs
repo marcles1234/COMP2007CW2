@@ -18,6 +18,7 @@ public class Interactor : MonoBehaviour
     public Trigger triggerZone;
     public Text interactText;
     Outline currentOutline;
+    public AudioSource ding;
 
 
     // Update is called once per frame
@@ -84,6 +85,7 @@ public class Interactor : MonoBehaviour
                         if (inZone)
                         {
                             triggerZone.ObjectDeposit(-1);
+                            mover.inObjective(false);
                         }
                         heldObject = targetObject;
                     }
@@ -109,7 +111,9 @@ public class Interactor : MonoBehaviour
                 // Notify trigger if in zone
                 if (inZone)
                 {
+                    ding.Play();
                     triggerZone.ObjectDeposit(1);
+                    mover.inObjective(true);
                 } else
                 {
                     mover.speed = mover.runSpeed;
