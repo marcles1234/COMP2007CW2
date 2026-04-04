@@ -21,6 +21,7 @@ public class FirstPersonController : MonoBehaviour
     public CinemachineVirtualCamera playerCam;
     public GameObject pitchfork;
     public AudioSource walkSound;
+    public CanvasManager canMan;
 
     void Start()
     {
@@ -110,8 +111,7 @@ public class FirstPersonController : MonoBehaviour
         pitchfork.SetActive(false);
         currentSpeed = 0;
         playerAnim.Play("Victory", 0, 0f);
-        playerCam.Priority = 9;
-        this.enabled = false;
+        canMan.swap();
     }
 
 

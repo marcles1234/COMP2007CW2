@@ -7,7 +7,7 @@ public class ObjectMove : MonoBehaviour
     public Transform checkPoints;
     private int currentPointIndex = 0;
     private Vector3 currentPoint = Vector3.zero;
-    float walkSpeed = 10f;
+    public float walkSpeed = 10f;
     public float runSpeed = 20f;
     public float speed;
     private Vector3 target;
@@ -49,6 +49,7 @@ public class ObjectMove : MonoBehaviour
             {
                 if (!ambient.isPlaying) 
                 {
+                    ambient.volume = 0.4f;
                     ambient.Play();
                     ruffle.Stop();
                 }    
