@@ -1,5 +1,5 @@
 # COMP2007CW2
-Chicken wrangling game
+To view this with formatting, view in code or raw view
 
 
 ------USAGE DECLARATION------
