@@ -1,5 +1,5 @@
 # COMP2007CW2
-To view this with formatting, view in code or raw view
+To view this with formatting, use code or raw view
 
 
 ------USAGE DECLARATION------
